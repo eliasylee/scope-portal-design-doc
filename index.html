@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>SCOPE Portal Design Doc</title>
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
     <link rel="stylesheet" href="./index.css" media="screen">
     <link href="https://fonts.googleapis.com/css?family=Baskervville&display=swap" rel="stylesheet">
   </head>
@@ -12,37 +13,35 @@
       <div class="header">SCOPE Portal - Design Document</div>
       <div class="sub-header">Elias Lee - Sole Developer</div>
       <div class="text">Student Clinical Opportunities for Premedical Experience (SCOPE) is a student-run organization based out of Stanford University that focuses on creating a shared community for anyone interested in medicine or pursuing a career in medicine. A big reason why volunteers come to SCOPE, however, is for the volunteering opportunity in the Emergency Department (ED) at the Santa Clara Valley Medical Center (SCVMC) in San Jose.</div>
-      <div class="text">Monthly shift schedules for physicians at the SCVMC ED are sent to SCOPE as a JPEG file the month prior. After that it is up to volunteers in the organization to set up a way for members to sign up for shifts and reference the results at a later time. When I joined, shift sign-ups were clunky and unwieldy, both for members to use and for the web team to set up every month. Due to the nature of the problem, there was a need for a novel solution to automate the process.</div>
-      <div class="text">My dissatisfaction with the existing system led me to create SCOPE Portal, a members-only platform where the process of inputting shift data and signing up for shifts could be streamlined. In this document I’ll recount the development process of the application as well as some of the design decisions I made.</div>
+      <div class="text">Monthly shift schedules for physicians at the SCVMC ED are sent to SCOPE as a JPEG file the month prior. After that it is up to the hospital coordinators in the organization to set up shift sign-ups for the rest of the volunteers. When I joined, shift sign-ups were clunky and unwieldy, both for members to use and for the web team to set up every month.</div>
+      <div class="text">The state of the existing system led me to create SCOPE Portal, a members-only platform where the process of inputting shift data and signing up for shifts could be streamlined. In this document I’ll recount the development process of the application as well as some of the design decisions I made.</div>
     </section>
     <section>
       <div class="header">The Problem</div>
-      <div class="text">When I first joined, Eventbrite was the go-to method for shift sign-ups. This meant that an individual had to manually input each physician’s name for each shift of each day of the month as options while referencing the monthly schedule. Not only was this process tedious and time-consuming, it had to be done each month.</div>
       <img src="./assets/eventbrite-logo.png" width="300px">
+      <div class="text">When I joined SCOPE, Eventbrite was used for shift sign-ups. This meant that an individual had to manually input each physician’s name for each shift of each day of the month. Not only was this process tedious and time-consuming, it had to be done every month.</div>
       <div class="text">Furthermore, it’s not hard to imagine that using Eventbrite’s form style was unintuitive. Scrolling down a ~240 entry list (8 shifts per day, ~30 days per month) made it difficult to visualize planning your schedule.</div>
-      <div class="text">This form factor meant that users signing up for a shift had to open the schedule JPEG file if they wanted to see the month’s schedule before scanning the form’s list of shifts.</div>
-      <div class="text">And if the shift had already been filled by another volunteer? One would inevitably reference the monthly schedule again to find another shift they wanted before returning to the Eventbrite link. Not good, especially on mobile.</div>
+      <div class="text">This form factor meant that users signing up had to reference the JPEG file if they wanted to see the month’s schedule before scanning the form’s list of shifts. And if the shift had already been filled by another volunteer? One would return to the schedule to find another shift before returning to the Eventbrite link. Not good, especially on mobile.</div>
     </section>
     <section>
       <div class="header">The Problem: Part 2</div>
-      <div class="text">A resourceful volunteer at SCOPE helped us transition from Eventbrite to JotForm. This eliminated the need to manually populate the next month’s shifts, and whoever was in charge of setting up just had to label each day of the month the same 8 shifts available at the hospital. The form was still a ~240 entry list that the user had to scroll through, but we were at least making gains on the burden of setup.</div>
       <img src="./assets/jotform-logo.png" width="300px">
-      <div class="text">As before, when volunteers sign up for shifts, they could see which shifts previous users had already signed-up for.</div>
+      <div class="text">A volunteer at SCOPE helped us transition from Eventbrite to JotForm. The way it was set up, instead of manually populating each shift, the organizer just had to copy and paste the 8 shifts available each day. The first page of the form was still a ~240 entry list that the user had to scroll through, but we were at least making gains on the burden of setup.</div>
       <img src="./assets/jotform-page-1.png" width="500px">
-      <div class="text">However, because JotForm lacks the capability to export form submissions to Google Calendar—something Eventbrite had—users were put through a second step. They had to manually populate the day, the time, the location, and the physician assigned to each shift they signed up for. Worse yet, users could not see what they had signed up for on the previous page, forcing them to remember details of their selection.</div>
+      <div class="text">However, because shifts no longer specified details about the shift (location and physician) and the new form factor couldn’t be ported into Google Docs, a new second page was added to the form. Users had to manually populate the day, the time, the location, and the physician for each shift they signed up for. Worse yet, users could not see what they had signed up for on the previous page, forcing them to remember details of their selection.</div>
       <img src="./assets/jotform-page-2.png" width="500px">
-      <div class="text">The result of this was a 2-page form that from the perspective of the user had terrible UI/UX Even though creating the form was simplified for management, pushing the effort onto the users felt like we had taken a step back to square one.</div>
+      <div class="text">The result of this was a 2-page form that from the perspective of the user had terrible UI/UX Even though creating the form was simplified for management, pushing the effort onto the users felt like we had taken a step back</div>
     </section>
     <section>
       <div class="header">The Beginning</div>
-      <div class="text">For the longest time I had my sights set on creating a user portal that would serve as a centralized hub for information and, better yet, shift sign-ups. Such an application would require authentication and possibly roles. Also I would somehow automate or streamline the process of uploading the hospital shift information and build a UI that was both easy to use and easy on the eyes.</div>
-      <div class="text">Beyond this, I had some consideration in mind. I knew that if I were to implement any sort of application for the organization, it would have to:</div>
+      <div class="text">For the longest time I had my sights set on creating a user portal that would serve as a centralized hub for information and more importantly shift sign-ups. Such an application would require authentication and possibly roles. Also I would somehow automate or streamline the process of uploading the hospital shift information and build a UI that was both easy to use and easy on the eyes.</div>
+      <div class="text">I had some considerations in mind. I knew that if I were to implement any sort of application for the organization, it would have to:</div>
       <ul>
-        <li>Be either so reliable that failure was not even a possibility, or if it failed it did not break existing methods in place. I chose to be backwards compatible, the application would be an abstraction layer, meaning if the service went down and I was not available to fix things, operations could continue as they did before.</li>
-        <li>Be stupid easy upkeep, so that actual coding skills are not necessary. The manner in which the application ingested its data would have to be designed in such a way that anyone, with or without a background in tech, could jump in and take over tasks. To me this meant placing our data into a few specific files that just required adding an additional line if it needed to be updated.</li>
+        <li>Be such that if it failed it did not break existing methods in place. I chose to be backwards compatible, the application would be an abstraction layer, meaning if the service went down and I was not available to fix things, operations could continue as they did before.</li>
+        <li>Be easy upkeep, so that actual coding skills are not necessary. The manner in which the application ingested its data would have to be designed in such a way that anyone, with or without a background in tech, could jump in and take over tasks. To me this meant placing our data into a few specific files that just required adding an additional line of code if needed.</li>
         <li>Be simplistic. There’s a difference between an instruction list that is easy to follow once you understand it, and one that is easy to follow right off the bat. To me this meant that how I designed the application and the maintenance process had to make sense and had to be straightforward. The fewer the steps and the easier each step, the better.</li>
       </ul>
-      <div class="text">Lastly, I won’t bore you with the details of the boilerplate, so what I used to set up my application is as follows:</div>
+      <div class="text">Lastly, without diving into the details of the boilerplate, what I used to set up my application is as follows:</div>
       <ul>
         <li>Client-Side Bundling: create-react-app</li>
         <li>Server: Express.js</li>
@@ -56,22 +55,6 @@
         <img src="./assets/firebase-logo.png" height="100px">
       </div>
       <div class="text">I selected each for the simplicity of implementation and based on my experience with React and Express.</div>
-    </section>
-    <section>
-      <div class="header">The Lesson</div>
-      <div class="text">I was ready to build the entire application, so the first thing I set up was the login page and the Firebase SDK to manage users. Soon I found myself in the weeds considering everything about managing the user’s experience and how I would implement it:</div>
-      <ul>
-        <li>Is the user going to want a ‘Remember me?’ or ‘Keep me logged in’ option?</li>
-        <li>What if the user navigates away only to return soon after and have to re-login?</li>
-        <li>How am I going to ensure that users can’t navigate to the app’s internal pages wrongfully?</li>
-        <li>Do I want to bootstrap by building auth-related features in the code? Or should I do things properly with tokens?</li>
-        <li>Where is the Firebase SDK going to exist? Do we want the front-end or the back-end to be responsible?</li>
-      </ul>
-      <div class="text">These were only a few of the matters that I simultaneously thought about and struggled with initially. The worst part was that I tried building out each feature, for the sake of the user, without having a clear focus on how I wanted to design the infrastructure. Before accomplishing what set out to do in the name of “good UX”, I was left with a simple looking login page that led to a blank page that just said ‘Home’.</div>
-      <img src="./assets/home-page.png" width="400px">
-      <div class="text">I realized at this point that I had never truly understood one of the tenets that lives at the intersection of good software engineering and prudent product management:</div>
-      <div class="special-text">Don’t over-engineer something when you haven't proven its value yet.</div>
-      <div class="text">I was so used to working on projects that had clear product and design goals, which meant I just had to carry out the implementation. So I asked myself, why was I spending so much time on authentication when I didn’t know if I could even automate uploading monthly schedules? After all, I knew my front-end chops were fine and that building login features and the user interface was going to happen one way or another. The core question I wanted to answer was whether or not I could actually automate setting up monthly shifts, so I set out to answer that first.</div>
     </section>
     <section>
       <div class="header">The Algorithm</div>
@@ -149,7 +132,7 @@
     </section>
     <section>
       <div class="header">CSS</div>
-      <div class="text">For this project I decided to fully implement the Block Element Modifier (BEM) naming convention. In the past I was on the fence about BEM because I always believed that with good classnames other developers can intuitively understand component references and overall component hierarchy. Not to mention, with BEM one can end up with really long classnames that feel excessive and are harder to parse at a glance.</div>
+      <div class="text">For this project I decided to fully implement the Block Element Modifier (BEM) naming convention. In the past I was on the fence about BEM because I always believed that with good classnames  other developers can intuitively understand component references and overall component hierarchy. Not to mention, with BEM one can end up with really long classnames that feel excessive and are harder to parse at a glance.</div>
       <div class="text">However, I ran into an issue where simple naming choices started to overlap between unrelated components and it couldn’t be easily solved by modularizing components into common ones. Accounting for differences between somewhat similar components meant one had to force common components to handle logic and had the potential to bleed complexity into class naming and the style sheets.</div>
       <img src="./assets/bem-name.png" width="400px">
       <div class="text">Overall I’m not too satisfied with long BEM classnames but it got the job done namespacing similar components and clarifying what styles applied to which component.</div>
@@ -177,13 +160,34 @@
       <div class="text">Storing our data in this way makes things very explicit and clear while developing and easy to update even without coding experience.</div>
     </section>
     <section>
-      <div class="header">Conclusion</div>
-      <div class="text">With a simple visual comparison we can see that the experience has been improved a lot for the end user.</div>
-      <div class="text">And although we increased the work for the user setting up the monthly sign-ups, the automation in the code means the effort required is still not as bad as it was when Eventbrite event forms were used.</div>
-      <div class="text">Additional features including shift look-up and deletion greatly add to the experience for volunteers, and also removes the manual work for those managing hospital shift sign-ups.</div>
+      <div class="header">The Lesson</div>
+      <div class="text">When I started out building SCOPE Portal, I was ready to build the entire application. I dived right into building the login page and leveraging the Firebase SDK to manage users. Soon I found myself in the weeds considering everything about managing the user’s experience and how I would implement it:</div>
+      <ul>
+        <li>Is the user going to want a ‘Remember me?’ or ‘Keep me logged in’ option?</li>
+        <li>What if the user navigates away only to return soon after and have to re-login?</li>
+        <li>How am I going to ensure that users can’t navigate to the app’s internal pages wrongfully?</li>
+        <li>Do I want to bootstrap by building auth-related features in the code? Or should I do things properly with tokens?</li>
+        <li>Where is the Firebase SDK going to exist? Do we want the front-end or the back-end to be responsible?</li>
+      </ul>
+      <div class="text">These were only a few of the matters that I simultaneously thought about and struggled with initially. The worst part was that I tried building out each feature, for the sake of the user, without having a clear focus on how I wanted to design the infrastructure. Before accomplishing what set out to do in the name of “good UX”, I was left with a simple looking login page that led to a blank page that just said ‘Home’.</div>
+      <img src="./assets/home-page.png" width="400px">
+      <div class="text">I realized at this point that I had never truly experienced one of the tenets that lives at the intersection of good software engineering and prudent product management:</div>
+      <div class="special-text">Don’t over-engineer something when you haven't proven its value yet.</div>
+      <div class="text">I was so used to working on projects that had clear product and design goals, which meant I just had to carry out the implementation. So I stopped to ask myself, why was I spending so much time on authentication when I didn’t know if I could even automate uploading monthly schedules? After all, I knew my front-end chops were fine and that building login features and the user interface was going to happen one way or another. The core question I wanted to answer was whether or not I could actually automate setting up monthly shifts. Once I overcame that initial challenge, the rest of the application slowly fell into place and its completion was just a matter of writing code.</div>
+    </section>
+    <section>
+      <div class="header">The Now</div>
+      <div class="text">At a glance it's simple to see that the experience has been improved a lot for the end user.</div>
+      <img src="./assets/final.gif" width="700px">
+      <div class="text">Although we increased the work for the user setting up the monthly sign-ups, the automation in the code means the effort required is still not as bad as it was when Eventbrite event forms were used. Additional features including shift look-up and deletion greatly added to the experience for volunteers, and also removes some of the manual work for those managing hospital shift sign-ups.</div>
       <div class="text">One thing I did not mention was the need to control when specific users are allowed to sign up for shifts. Interpreters who translate for Spanish or Vietnamese-speaking only patients at the ED are given priority when signing up for shifts because of their role in helping physicians. Instead of sending emails for shift sign-ups to a specific list of users, one can trust the SCOPE Portal to automatically open scheduling to the users with the appropriate privileges.</div>
-      <div class="text">We can also adjust rules for sign-ups, such as requiring translating volunteers to prioritize weekend shifts because professional interpreting services are not available to doctors on weekends.</div>
-      <div class="text">Volunteers who are new to the organization are not allowed to sign up for shifts until they have completed their training shifts with veteran volunteers. In the future, the interface can be modified to display the current month’s shifts to allow new volunteers to sign up with trainers without going through hospital coordinators. This would also reduce the workload for those managing shift sign-ups, who have to watch for emails and manually change the schedule as requests come in.</div>
+    </section>
+    <section>
+      <div class="header">The Future</div>
+      <div class="text">At the time of this writing, SCOPE Portal is still a pretty bare-bones, MVP-only application with a lot of room for future development. The application was pushed to live so hopefully users can begin using the streamlined process for shift sign-ups.</div>
+      <div class="text">One feature needed is the ability to adjust rules for sign-ups, such as requiring translating volunteers to prioritize weekend shifts because professional interpreting services are not available to doctors on weekends.</div>
+      <div class="text">Also, new volunteers in the organization are not allowed to sign up for shifts until they have completed their training shifts with veteran volunteers. In the future, the interface can be modified to display the current month’s shifts to allow new volunteers to sign up with trainers without going through hospital coordinators. This would also reduce the workload for those managing shift sign-ups, who have to watch for emails and manually change the schedule as requests come in.</div>
+      <div class="text">And lastly, a much needed feature is to remove the need to export shift data from JotForm to Google Docs. The interface in SCOPE Portal is already almost nearly fit for hospital coordinators to use, and is only missing the details of taken shifts (volunteer name and any roles: veteran or interpreter). The next step would be to remove the need to go in an adjust shifts for volunteers by giving users more control over their shifts.</div>
     </section>
   </body>
 </html>
